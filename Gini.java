@@ -124,13 +124,13 @@ public class Gini{
                 yearList.add(yearVal);
             }
             // to call the methods
-            // getGiniIndex(acousticnessList, popularityList);
-            // System.out.println();
-            // getGiniIndex(danceability, popularityList);
-            // System.out.println();
-            // getGiniIndex(energy, popularityList);
-            // System.out.println();
-            // getGiniIndex(loudnessList, popularityList);
+//             System.out.println(getGiniIndex(acousticnessList, popularityList));
+//             System.out.println();
+//             System.out.println(getGiniIndex(danceability, popularityList));
+//             System.out.println();
+//             System.out.println(getGiniIndex(energy, popularityList));
+//             System.out.println();
+//             System.out.println(getGiniIndex(loudnessList, popularityList));
 
         } catch (FileNotFoundException e) {
             e.printStackTrace();
@@ -147,16 +147,16 @@ public class Gini{
         }
     }
 
-    public static double getGiniIndex(List<Double> characteristic, List<Double> popularity){
+    public static List<Double> getGiniIndex(List<Double> characteristic, List<Double> popularity){
         double characteristic1_Popular = 0.0;       //have the characteristic and is Popular
         double characteristic1_notPopular = 0.0;    //have the characteristic and is not Popular
         double characteristic0_Popular = 0.0;       //doesn't have the characteristic and is Popular
         double characteristic0_notPopular = 0.0;    //doesn't have the characteristic and is not Popular
         
-        int characteristic1Pop1 = 0;
-        int characteristic1Pop0 = 0;
-        int characteristic0Pop1 = 0;
-        int characteristic0Pop0 = 0;
+        int characteristic1Pop1 = 0;        // to get the number of songs with the characteristic and is Popular
+        int characteristic1Pop0 = 0;        // to get the number of songs with the characteristic and is NOT Popular
+        int characteristic0Pop1 = 0;        // to get the number of songs withOUT the characteristic and is Popular
+        int characteristic0Pop0 = 0;        // to get the number of songs withOUT the characteristic and is NOT Popular
 
         double mean = getMean(characteristic); // to get the mean of the characteristics
 
@@ -187,18 +187,18 @@ public class Gini{
         double a1p0_gini_group = (1.0 - characteristic1_notPopular * characteristic1_Popular) * (characteristic1Pop0/(double)characteristic.size());
         double a0p1_gini_group = (1.0 - characteristic0_Popular * characteristic1_Popular) * (characteristic0Pop1/(double)characteristic.size());
         double a0p0_gini_group = (1.0 - characteristic0_notPopular * characteristic1_Popular) * (characteristic0Pop0/(double)characteristic.size());
-
-        //printing the gini index for each group
-        System.out.println("a1p1_gini_group == " + a1p1_gini_group);
-        System.out.println("a1p0_gini_group == " + a1p0_gini_group);
-        System.out.println("a0p1_gini_group == " + a0p1_gini_group);
-        System.out.println("a0p0_gini_group == " + a0p0_gini_group);
         
-        return a0p0_gini_group;
+        List<Double> giniList = new ArrayList<Double>();    // to insert the different gini into the arraylist
+        
+        giniList.add(a1p1_gini_group);      // giniList.get(0) will return the gini index for have the characteristic and is Popular
+        giniList.add(a1p0_gini_group);      // giniList.get(1) will return the gini index for have the characteristic and is NOT Popular
+        giniList.add(a0p1_gini_group);      // giniList.get(2) will return the gini index for doesn't have the characteristic and is Popular
+        giniList.add(a0p0_gini_group);      // giniList.get(3) will return the gini index for doesn't have the characteristic and is NOT Popular
+
+        return giniList;
     }
     
     public static double getMean(List<Double> characteristic){
-        // double mean = 0;
         double total = 0;
         for(int i = 0; i < characteristic.size(); i++){
             total += characteristic.get(i);
@@ -206,5 +206,4 @@ public class Gini{
         System.out.println(total/characteristic.size());
         return total/characteristic.size();
     }
-
 }
