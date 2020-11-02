@@ -124,10 +124,23 @@ public class Gini{
             /*
                 Call GINI methods
             */
-            // System.out.println(getGiniIndex(acousticnessList, popularityList) + "/n");
-            // System.out.println(getGiniIndex(danceability, popularityList) + "\n");
-            // System.out.println(getGiniIndex(energy, popularityList) + "\n");
-            // System.out.println(getGiniIndex(loudnessList, popularityList));
+            
+            System.out.println(getGiniIndexForDouble(acousticnessList, popularityList) + "\n");
+            System.out.println(getGiniIndexForDouble(danceabilityList, popularityList) + "\n");
+            System.out.println(getGiniIndexForDouble(energyList, popularityList) + "\n");
+            System.out.println(getGiniIndexForDouble(instrumentalnessList, popularityList) + "\n");
+            System.out.println(getGiniIndexForDouble(livenessList, popularityList) + "\n");
+            System.out.println(getGiniIndexForDouble(loudnessList, popularityList) + "\n");
+            System.out.println(getGiniIndexForDouble(speechinessList, popularityList) + "\n");
+            System.out.println(getGiniIndexForDouble(tempoList, popularityList) + "\n");
+            System.out.println(getGiniIndexForDouble(valenceList, popularityList) + "\n");
+
+            System.out.println(getGiniIndexForInt(durationInMSList, popularityList) + "\n");
+            System.out.println(getGiniIndexForInt(explictValList, popularityList)+ "\n");
+            System.out.println(getGiniIndexForInt(keyList, popularityList)+ "\n");
+            System.out.println(getGiniIndexForInt(modeList, popularityList)+ "\n");
+            System.out.println(getGiniIndexForInt(popularityList, popularityList)+ "\n");
+            System.out.println(getGiniIndexForInt(yearList, popularityList)+ "\n");
 
         } catch (FileNotFoundException e) {
             e.printStackTrace();
@@ -144,7 +157,7 @@ public class Gini{
         }
     }
 
-    public static List<Double> getGiniIndex(List<Double> characteristic, List<Double> popularity){
+    public static List<Double> getGiniIndexForDouble(List<Double> characteristic, List<Integer> popularity){
         double characteristic1_Popular = 0.0;       //have the characteristic and is Popular
         double characteristic1_notPopular = 0.0;    //have the characteristic and is not Popular
         double characteristic0_Popular = 0.0;       //doesn't have the characteristic and is Popular
@@ -155,7 +168,7 @@ public class Gini{
         int characteristic0Pop1 = 0;        // to get the number of songs withOUT the characteristic and is Popular
         int characteristic0Pop0 = 0;        // to get the number of songs withOUT the characteristic and is NOT Popular
 
-        double mean = getMean(characteristic); // to get the mean of the characteristics
+        double mean = getDoubleMean(characteristic); // to get the mean of the characteristics
 
         // to get the sum of the different proportions of the classes with respect to the given characteristic and popularity
         for(int i = 0; i < characteristic.size(); i++){
@@ -195,7 +208,67 @@ public class Gini{
         return giniList;
     }
 
-    public static double getMean(List<Double> characteristic){
+    public static double getDoubleMean(List<Double> characteristic){
+        double total = 0;
+        for(int i = 0; i < characteristic.size(); i++){
+            total += characteristic.get(i);
+        }
+        System.out.println(total/characteristic.size());
+        return total/characteristic.size();
+    }
+
+    public static List<Double> getGiniIndexForInt(List<Integer> characteristic, List<Integer> popularity){
+        double characteristic1_Popular = 0.0;       //have the characteristic and is Popular
+        double characteristic1_notPopular = 0.0;    //have the characteristic and is not Popular
+        double characteristic0_Popular = 0.0;       //doesn't have the characteristic and is Popular
+        double characteristic0_notPopular = 0.0;    //doesn't have the characteristic and is not Popular
+
+        int characteristic1Pop1 = 0;        // to get the number of songs with the characteristic and is Popular
+        int characteristic1Pop0 = 0;        // to get the number of songs with the characteristic and is NOT Popular
+        int characteristic0Pop1 = 0;        // to get the number of songs withOUT the characteristic and is Popular
+        int characteristic0Pop0 = 0;        // to get the number of songs withOUT the characteristic and is NOT Popular
+
+        double mean = getIntMean(characteristic); // to get the mean of the characteristics
+
+        // to get the sum of the different proportions of the classes with respect to the given characteristic and popularity
+        for(int i = 0; i < characteristic.size(); i++){
+            if(characteristic.get(i) >= mean && popularity.get(i) > 0){
+                characteristic1Pop1++;
+            }
+            if(characteristic.get(i) < mean && popularity.get(i) > 0){
+                characteristic0Pop1++;
+            }
+            if(characteristic.get(i) < mean && popularity.get(i) == 0){
+                characteristic0Pop0++;
+            }
+            if(characteristic.get(i) >= mean && popularity.get(i) == 0){
+                characteristic1Pop0++;
+            }
+        }
+
+        // to get the proportion
+        characteristic1_Popular = characteristic1Pop1 /(double)characteristic.size();
+        characteristic1_notPopular = characteristic1Pop0 /(double)characteristic.size();
+        characteristic0_Popular = characteristic0Pop1 /(double)characteristic.size();
+        characteristic0_notPopular = characteristic0Pop0 /(double)characteristic.size();
+
+        //to get the gini index for each group
+        double a1p1_gini_group = (1.0 - characteristic1_Popular * characteristic1_Popular) * (characteristic1Pop1/(double)characteristic.size());
+        double a1p0_gini_group = (1.0 - characteristic1_notPopular * characteristic1_Popular) * (characteristic1Pop0/(double)characteristic.size());
+        double a0p1_gini_group = (1.0 - characteristic0_Popular * characteristic1_Popular) * (characteristic0Pop1/(double)characteristic.size());
+        double a0p0_gini_group = (1.0 - characteristic0_notPopular * characteristic1_Popular) * (characteristic0Pop0/(double)characteristic.size());
+
+        List<Double> giniList = new ArrayList<Double>();    // to insert the different gini into the arraylist
+
+        giniList.add(a1p1_gini_group);      // giniList.get(0) will return the gini index for have the characteristic and is Popular
+        giniList.add(a1p0_gini_group);      // giniList.get(1) will return the gini index for have the characteristic and is NOT Popular
+        giniList.add(a0p1_gini_group);      // giniList.get(2) will return the gini index for doesn't have the characteristic and is Popular
+        giniList.add(a0p0_gini_group);      // giniList.get(3) will return the gini index for doesn't have the characteristic and is NOT Popular
+
+        return giniList;
+    }
+
+    public static double getIntMean(List<Integer> characteristic){
         double total = 0;
         for(int i = 0; i < characteristic.size(); i++){
             total += characteristic.get(i);
