@@ -32,35 +32,23 @@ public class Gini{
                 headers.add(rows.get(0)[h]);
             }
 
-            List<Double> acousticnessList = new ArrayList<Double>();
-            List<Double> danceabilityList = new ArrayList<Double>();
-            List<Double> durationInMSList = new ArrayList<Double>();
-            List<Double> energyList = new ArrayList<Double>();
-            List<Double> explictValList = new ArrayList<Double>();
-            List<Double> instrumentalnessList = new ArrayList<Double>();
-            List<Double> keyList = new ArrayList<Double>();
-            List<Double> livenessList = new ArrayList<Double>();
-            List<Double> loudnessList = new ArrayList<Double>();
-            List<Double> modeList = new ArrayList<Double>();
-            List<Double> popularityList = new ArrayList<Double>();
-            List<Double> speechinessList = new ArrayList<Double>();
-            List<Double> tempoList = new ArrayList<Double>();
-            List<Double> valenceList = new ArrayList<Double>();
+            List<Double> acousticnessList = new ArrayList<>();
+            List<Double> danceabilityList = new ArrayList<>();
+            List<Double> energyList = new ArrayList<>();
+            List<Double> instrumentalnessList = new ArrayList<>();
+            List<Double> livenessList = new ArrayList<>();
+            List<Double> loudnessList = new ArrayList<>();
+            List<Double> speechinessList = new ArrayList<>();
+            List<Double> tempoList = new ArrayList<>();
+            List<Double> valenceList = new ArrayList<>();
 
-            List<String> releaseDateList = new ArrayList<String>();
-            for (int i = 1; i <rows.size(); i ++) {
-                releaseDateList.add(rows.get(i)[12]);
-            }
 
-            List<String> idList = new ArrayList<String>();
-            for (int i = 1; i <rows.size(); i ++) {
-                idList.add(rows.get(i)[5]);
-            }
-
-            List<String> yearList = new ArrayList<String>();
-            for (int i = 1; i <rows.size(); i ++) {
-                yearList.add(rows.get(i)[11]);
-            }
+            List<Integer> durationInMSList = new ArrayList<>();
+            List<Integer> explictValList = new ArrayList<>();
+            List<Integer> keyList = new ArrayList<>();
+            List<Integer> modeList = new ArrayList<>();
+            List<Integer> popularityList = new ArrayList<>();
+            List<Integer> yearList = new ArrayList<>();
 
             /*
                 Generate Respective Arraylists
@@ -72,56 +60,64 @@ public class Gini{
                     String regexDouble = "^-?\\d*\\.\\d+|\\d+\\.\\d*$";
                     String regexDoubleWithLetters = "\\.?\\b[0-9]*\\.?[0-9]+(?:[eE][-+]?[0-9]+)?[fD]?\\b";
                     String str = rows.get(i)[headerCounter];
-                    if (str.matches(regexDouble) || str.matches(regexDoubleWithLetters) || str.matches(regexInt)) {
-                        String header = headers.get(headerCounter);
-                        Double value = Double.parseDouble(str);
+                    String header = headers.get(headerCounter);
+                    if (str.matches(regexDouble) || str.matches(regexDoubleWithLetters)) {
+                        Double doubleValue = Double.parseDouble(str);
                         switch (header) {
                             case "acousticness":
-                                acousticnessList.add(value);
+                                acousticnessList.add(doubleValue);
                                 break;
                             case "danceability":
-                                danceabilityList.add(value);
-                                break;
-                            case "duration_ms":
-                                durationInMSList.add(value);
+                                danceabilityList.add(doubleValue);
                                 break;
                             case "energy":
-                                energyList.add(value);
-                                break;
-                            case "explicit":
-                                explictValList.add(value);
+                                energyList.add(doubleValue);
                                 break;
                             case "instrumentalness":
-                                instrumentalnessList.add(value);
-                                break;
-                            case "key":
-                                keyList.add(value);
+                                instrumentalnessList.add(doubleValue);
                                 break;
                             case "liveness":
-                                livenessList.add(value);
+                                livenessList.add(doubleValue);
                                 break;
                             case "loudness":
-                                loudnessList.add(value);
-                                break;
-                            case "mode":
-                                modeList.add(value);
-                                break;
-                            case "popularity":
-                                popularityList.add(value);
+                                loudnessList.add(doubleValue);
                                 break;
                             case "speechiness":
-                                speechinessList.add(value);
+                                speechinessList.add(doubleValue);
                                 break;
                             case "tempo":
-                                tempoList.add(value);
+                                tempoList.add(doubleValue);
                                 break;
                             case "valence":
-                                valenceList.add(value);
+                                valenceList.add(doubleValue);
+                                break;
+                    }
+
+                    if (str.matches(regexInt)) {
+                        Integer intValue = Integer.parseInt(str);
+                        switch(header) {
+                            case "duration_ms":
+                                durationInMSList.add(intValue);
+                                break;
+                            case "explicit":
+                                explictValList.add(intValue);
+                                break;
+                            case "key":
+                                keyList.add(intValue);
+                                break;
+                            case "mode":
+                                modeList.add(intValue);
+                                break;
+                            case "popularity":
+                                popularityList.add(intValue);
+                                break;
+                            case "year":
+                                yearList.add(intValue);
                                 break;
                             }
+                        }
                     }
                 }
-
                 headerCounter++;
             }
 
@@ -208,28 +204,4 @@ public class Gini{
         return total/characteristic.size();
     }
 
-    /*
-        Extract artists and song title based on the specific row
-    */
-    public static void getArtistandSongTitle(List<String[]> rows, ArrayList<String> headers, int row) {
-            String fullArtists = "";
-            String songTitle = "";
-            String regex = "\\[.*.\\]";
-            String regex2 = "^\"[\\['].*.[']";
-            String regex3 = "^ ['].*.[']\\]\"";
-            String regex4 = "^ ['].*.[']";
-            int columnCount = rows.get(row).length;
-            int ArtistHeaderCount = headers.indexOf("artists");
-            for (int col = ArtistHeaderCount; col < columnCount; col++) {
-                String str = rows.get(row)[col];
-                if (str.matches(regex) || str.matches(regex2) || str.matches(regex3) || str.matches(regex4)) {
-                    fullArtists += str;
-                } else {
-                    songTitle += str;
-                }
-            }
-
-            System.out.println("Artists: "+ fullArtists);
-            System.out.println("Song title: " + songTitle);
-    }
 }
