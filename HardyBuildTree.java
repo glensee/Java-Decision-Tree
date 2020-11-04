@@ -4,9 +4,6 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
-import jdk.nashorn.internal.parser.TokenStream;
-import jdk.nashorn.internal.runtime.arrays.ArrayLikeIterator;
-
 public class HardyBuildTree {
     public void split(HashMap<String, Object> node, int maxDepth, int minSize, int depth) {
         ArrayList<ArrayList<Double>> left = ((ArrayList<ArrayList<ArrayList<Double>>>) node.get("groups")).get(0);
@@ -52,12 +49,12 @@ public class HardyBuildTree {
 
     }
 
-    public HashMap<String, Object> buildTree(ArrayList<ArrayList<Integer>> train, double maxDepth, int minSize) {
+    public HashMap<String, Object> buildTree(ArrayList<ArrayList<Double>> train, int maxDepth, int minSize) {
         HashMap<String, Object> root = getSplit(train);
         split(root, maxDepth, minSize, 1);
         return root;
     }
-
+a
     public Double toTerminal(ArrayList<ArrayList<Double>> group) {
 
         HashMap<Double, Integer> map = new HashMap<>(); 
