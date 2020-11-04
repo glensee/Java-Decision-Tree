@@ -193,7 +193,43 @@ public class DecisionTree {
 
     // }
 
-    
+    public Double gini_index(ArrayList<ArrayList<ArrayList<Double>>> groups, ArrayList<Double> classes) {
+        double n_instances = 0;
+        for (ArrayList<ArrayList<Double>> group : groups) {
+            n_instances += group.size();
+        }
+
+        double gini = 0.0;
+
+        for (ArrayList<ArrayList<Double>> group : groups) {
+            double size = group.size();
+
+            if (size == 0) {
+                continue;
+            }
+
+            double score = 0.0;
+
+            for (Double label : classes) {
+                int last_index = group.get(0).size() - 1;
+                int count = 0;
+
+                for (ArrayList<Double> row : group) {
+                    if (row.get(last_index) == label) {
+                        count++;
+                    }
+                }
+                double p = count/size;
+                score += p * p;
+            }
+            gini += (1.0 - score) * size / n_instances;
+        }
+        
+        return gini;    
+    }
+
+
+
     public static void main(String[] args) {
 
     }
