@@ -226,6 +226,29 @@ public class decisionTree {
         return gini;    
     }
 
+    public static ArrayList<ArrayList<ArrayList<Double>>> train_test_split(ArrayList<ArrayList<Double>> dataset, double test_size) {
+        ArrayList<ArrayList<Double>> randomized = new ArrayList<>();
+
+        // Create a new copy and shuffle the elements
+        Collections.copy(dataset, randomized);
+        Collections.shuffle(randomized);
+
+        // Find the index where the test size should stop
+        double testEnd = dataset.size() * test_size;
+        int testIndex = (int) testEnd;
+
+        // Separate the 2 datasets
+        ArrayList<ArrayList<Double>> test = new ArrayList<>(randomized.subList(0,testIndex));
+        ArrayList<ArrayList<Double>> train = new ArrayList<>(randomized.subList(testIndex,randomized.size()));
+
+        ArrayList<ArrayList<ArrayList<Double>>> result = new ArrayList<>();
+
+        // Add them into the output result
+        result.add(train);
+        result.add(test);
+
+        return result;
+    }
 
     private  static ArrayList<ArrayList<Double>> dataSet;
     public static void main(String[] args) {
@@ -251,6 +274,8 @@ public class decisionTree {
 
         System.out.println(dataSet);
     }
+
+
     // to add the double values into the arraylist
     private static void doubleArray(Double d, Double d1, Double i){
         ArrayList<Double> doubleArray = new ArrayList<Double>(); 
