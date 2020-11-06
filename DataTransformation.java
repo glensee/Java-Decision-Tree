@@ -8,14 +8,14 @@ import java.security.Key;
 import java.text.NumberFormat.Style;
 import java.time.temporal.Temporal;
 
-public class newGini{
+public class DataTransformation{
     public static void main(String[] args) {
         // Remember to Change csvFile Path to local directory
         String csvFile = "/Users/cheyennejanlee/Desktop/CS201/proj/data.csv";
         BufferedReader br = null;
         String line = "";
         ArrayList<ArrayList<Double>> data = new ArrayList<>();
-        
+
         try {
             br = new BufferedReader(new FileReader(csvFile));
             br.readLine();
@@ -31,7 +31,7 @@ public class newGini{
                     strLine[10] = Integer.toString(0);
                 }
                 //to swap the position of popular and year columns
-                var temp = strLine[10];                
+                var temp = strLine[10];
                 strLine[10] = strLine[14];
                 strLine[14] = temp;
 
