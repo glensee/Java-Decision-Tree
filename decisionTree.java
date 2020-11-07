@@ -1,6 +1,5 @@
 import java.util.*;
 
-
 public class decisionTree {
     public  static void split(HashMap<String, Object> node, int maxDepth, int minSize, int depth) {
         ArrayList<ArrayList<Double>> left = ((ArrayList<ArrayList<ArrayList<Double>>>) node.get("groups")).get(0);
@@ -8,7 +7,7 @@ public class decisionTree {
 
         node.remove("groups");
 
-        // Check for a no split 
+        // Check for a no split
         if (left == null) {
             node.put("left", toTerminal(right));
             node.put("right", toTerminal(right));
@@ -29,12 +28,12 @@ public class decisionTree {
         }
 
         // Process left child
-        if (left.size() <= minSize) { 
+        if (left.size() <= minSize) {
             node.put("left", toTerminal(left));
         } else {
             node.put("left", getSplit(left));
             split((HashMap<String, Object>) node.get("left"), maxDepth, minSize, depth + 1);
-        }   
+        }
 
         // Process right child
         if (right.size() <= minSize) {
@@ -56,9 +55,9 @@ public class decisionTree {
 
     public static  Double toTerminal(ArrayList<ArrayList<Double>> group) {
 
-        HashMap<Double, Integer> map = new HashMap<>(); 
+        HashMap<Double, Integer> map = new HashMap<>();
 
-        for (ArrayList<Double> row : group) { 
+        for (ArrayList<Double> row : group) {
             Double label = row.get(row.size() - 1);
             if (map.containsKey(label)) {
                 map.put(label, map.get(label) + 1);
@@ -77,7 +76,7 @@ public class decisionTree {
 
         return mostFrequentLabel;
     }
-    
+
 
     public  static ArrayList<ArrayList<ArrayList<Double>>> test_split(Integer index, Double value, ArrayList<ArrayList<Double>> dataset) {
         ArrayList<ArrayList<Double>> left = new ArrayList<>();
@@ -100,14 +99,14 @@ public class decisionTree {
 
     public  static HashMap<String, Object> getSplit(ArrayList<ArrayList<Double>> dataset) {
         HashMap<String, Object> result = new HashMap<>();
-        Set<Double> hashSet = new HashSet<>(); 
+        Set<Double> hashSet = new HashSet<>();
 
         for (ArrayList<Double> row : dataset) { // is there a simpler way to do this?
             hashSet.add(row.get(row.size() - 1));
         }
 
         ArrayList<Double> class_values = new ArrayList<>(hashSet);
-        
+
         Integer b_index = 999;
         Double b_value, b_score;
         b_value = b_score = 999.0;
@@ -141,12 +140,12 @@ public class decisionTree {
     public  static Double predict(HashMap<String, Object> tree, ArrayList<Double> row) {
         Integer index = (Integer) tree.get("index");
         Double value = (Double) tree.get("value");
-         
+
 
 
         if (row.get(index) <  value) {
             if (tree.get("left") instanceof HashMap ) {
-                
+
                 return predict((HashMap<String, Object>) tree.get("left"), row);
             } else {
                 return (Double) tree.get("left");
@@ -176,7 +175,7 @@ public class decisionTree {
 
 
     public  static Double accuracy_metrics(ArrayList<ArrayList<Double>> actual, ArrayList<ArrayList<Double>> predicted) {
-        Double count = 0.0 ; 
+        Double count = 0.0 ;
         int size = actual.get(0).size();
 
         for (int i = 0 ; i < actual.size(); i++) {
@@ -223,7 +222,7 @@ public class decisionTree {
             }
             gini += (1.0 - score) * size / n_instances;
         }
-        return gini;    
+        return gini;
     }
 
     public static ArrayList<ArrayList<ArrayList<Double>>> train_test_split(ArrayList<ArrayList<Double>> dataset, double test_size) {
@@ -252,7 +251,7 @@ public class decisionTree {
 
     private  static ArrayList<ArrayList<Double>> dataSet;
     public static void main(String[] args) {
-        dataSet = new ArrayList<ArrayList<Double>>(); 
+        dataSet = new ArrayList<ArrayList<Double>>();
 
         //insertion of the arraylist
         doubleArray(2.771244718,1.784783929,0.0);
@@ -268,17 +267,28 @@ public class decisionTree {
 
         HashMap<String, Object> tree = buildTree(dataSet,10,1);
         // ArrayList<Double> predictions = decision_tree(dataSet,dataSet,10,1); // for checking
-        
+
         System.out.println(tree);
         // System.out.println(predictions); // for checking
 
         System.out.println(dataSet);
+
+
+        // Testing using data
+        ArrayList<ArrayList<Double>> data = DataTransformation.getData();
+        System.out.println(data.get(1));
+        HashMap<String, Object> tree2 = buildTree(data,15,1);
+        System.out.println(tree2.get(1));
+        ArrayList<Double> predictions2 = decision_tree(data,data,15,1); // for checking
+        System.out.println(predictions2); // for checking
+
+
     }
 
 
     // to add the double values into the arraylist
     private static void doubleArray(Double d, Double d1, Double i){
-        ArrayList<Double> doubleArray = new ArrayList<Double>(); 
+        ArrayList<Double> doubleArray = new ArrayList<Double>();
         doubleArray.add(d);
         doubleArray.add(d1);
         doubleArray.add(i);

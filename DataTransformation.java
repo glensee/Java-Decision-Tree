@@ -9,9 +9,10 @@ import java.text.NumberFormat.Style;
 import java.time.temporal.Temporal;
 
 public class DataTransformation{
-    public static void main(String[] args) {
+
+    public static ArrayList<ArrayList<Double>> getData() {
         // Remember to Change csvFile Path to local directory
-        String csvFile = "/Users/cheyennejanlee/Desktop/CS201/proj/data.csv";
+        String csvFile = "/Users/sheryll/Downloads/data_updated.csv";
         BufferedReader br = null;
         String line = "";
         ArrayList<ArrayList<Double>> data = new ArrayList<>();
@@ -46,8 +47,12 @@ public class DataTransformation{
         }catch(IOException ioe){
             ioe.printStackTrace();
         }
-        for (int i = 0 ; i < 150 ; i++) {
-            System.out.println(data.get(i));
-        }
+
+        // for (int i = 0 ; i < 150 ; i++) {
+        //     System.out.println(data.get(i));
+        // }
+
+        return data;
     }
+
 }
