@@ -12,7 +12,8 @@ public class DataTransformation{
 
     public static ArrayList<ArrayList<Double>> getData() {
         // Remember to Change csvFile Path to local directory
-        String csvFile = "/Users/sheryll/Downloads/data_updated.csv";
+        // C:\Users\young\OneDrive\Documents\GitHub\DSA\data
+        String csvFile = "/Users/young/OneDrive/Documents/Github/DSA/data/data_updated.csv";
         BufferedReader br = null;
         String line = "";
         ArrayList<ArrayList<Double>> data = new ArrayList<>();

@@ -174,12 +174,11 @@ public class decisionTree {
     }
 
 
-    public  static Double accuracy_metrics(ArrayList<ArrayList<Double>> actual, ArrayList<ArrayList<Double>> predicted) {
+    public  static Double accuracy_metrics(ArrayList<Double> actual, ArrayList<Double> predicted) {
         Double count = 0.0 ;
-        int size = actual.get(0).size();
 
         for (int i = 0 ; i < actual.size(); i++) {
-            if (actual.get(i).get(size - 1) == predicted.get(i).get(size - 1)) {
+            if (actual.get(i)== predicted.get(i)) {
                 count += 1;
             }
         }
@@ -236,6 +235,7 @@ public class decisionTree {
         double testEnd = dataset.size() * test_size;
         int testIndex = (int) testEnd;
 
+        System.out.println(dataset.size());
         // Separate the 2 datasets
         ArrayList<ArrayList<Double>> test = new ArrayList<>(randomized.subList(0,testIndex));
         ArrayList<ArrayList<Double>> train = new ArrayList<>(randomized.subList(testIndex,randomized.size()));
@@ -249,39 +249,87 @@ public class decisionTree {
         return result;
     }
 
+    public static ArrayList<Double> last_column(ArrayList<ArrayList<Double>> dataframe) {
+        ArrayList<Double> last_column = new ArrayList<>();
+        int last_index = dataframe.get(0).size() - 1;
+        for (ArrayList<Double> row: dataframe) {
+            last_column.add(row.get(last_index));
+        }
+        return last_column;
+    }
+
     private  static ArrayList<ArrayList<Double>> dataSet;
     public static void main(String[] args) {
         dataSet = new ArrayList<ArrayList<Double>>();
+        Double test_size = 0.25;
+
 
         //insertion of the arraylist
-        doubleArray(2.771244718,1.784783929,0.0);
-        doubleArray(1.728571309,1.169761413,0.0);
-        doubleArray(3.678319846,2.81281357,0.0);
-        doubleArray(3.961043357,2.61995032,0.0);
-        doubleArray(2.999208922,2.209014212,0.0);
-        doubleArray(7.497545867,3.162953546,1.0);
-        doubleArray(9.00220326,3.339047188,1.0);
-        doubleArray(7.444542326,0.476683375,1.0);
-        doubleArray(10.12493903,3.234550982,1.0);
-        doubleArray(6.642287351,3.319983761,1.0);
+        // doubleArray(2.771244718,1.784783929,0.0);
+        // doubleArray(1.728571309,1.169761413,0.0);
+        // doubleArray(3.678319846,2.81281357,0.0);
+        // doubleArray(3.961043357,2.61995032,0.0);
+        // doubleArray(2.999208922,2.209014212,0.0);
+        // doubleArray(7.497545867,3.162953546,1.0);
+        // doubleArray(9.00220326,3.339047188,1.0);
+        // doubleArray(7.444542326,0.476683375,1.0);
+        // doubleArray(10.12493903,3.234550982,1.0);
+        // doubleArray(6.642287351,3.319983761,1.0);
 
-        HashMap<String, Object> tree = buildTree(dataSet,10,1);
+        // ArrayList<ArrayList<ArrayList<Double>>> train_test = train_test_split(dataSet, test_size);
+        // ArrayList<ArrayList<Double>> train = train_test.get(0);
+        // ArrayList<ArrayList<Double>> test = train_test.get(1);
+
+        // System.out.println(train);
+        // System.out.println(test);
+        // HashMap<String, Object> tree = buildTree(dataSet,10,1);
         // ArrayList<Double> predictions = decision_tree(dataSet,dataSet,10,1); // for checking
 
-        System.out.println(tree);
+        // System.out.println(tree);
         // System.out.println(predictions); // for checking
 
-        System.out.println(dataSet);
+        // System.out.println(dataSet);
 
 
         // Testing using data
         ArrayList<ArrayList<Double>> data = DataTransformation.getData();
-        System.out.println(data.get(1));
-        HashMap<String, Object> tree2 = buildTree(data,15,1);
-        System.out.println(tree2.get(1));
-        ArrayList<Double> predictions2 = decision_tree(data,data,15,1); // for checking
-        System.out.println(predictions2); // for checking
+        // System.out.println(data.get(1));
+        // System.out.println(data.get(100));
 
+        // System.out.println(data.size());
+        // System.out.println(data.get(0).size());
+
+        // HashMap<String, Object> tree2 = buildTree(data,15,10);
+        // System.out.println(tree2.get(1));
+
+
+        // ArrayList<ArrayList<ArrayList<Double>>> train_test = train_test_split(data, test_size);
+        // ArrayList<ArrayList<Double>> train = train_test.get(0);
+        // ArrayList<ArrayList<Double>> test = train_test.get(1);
+
+        // ArrayList<Double> predicted = decision_tree(train,test,15,10); // for checking
+        // ArrayList<Double> actual = new ArrayList<>();
+        // for (ArrayList<Double> row: test) { // refactor to get last column
+        //     actual.add(row.get(row.size() - 1));
+        // }
+
+        // data = (ArrayList<ArrayList<Double>>) data.subList(0, 50);
+
+
+
+        ArrayList<ArrayList<Double>> newdata = new  ArrayList<ArrayList<Double>>();
+        long startTime = System.nanoTime();
+        for (int i = 0 ; i < 1000; i++) {
+            newdata.add(data.get(i));
+        }
+        ArrayList<Double> predicted = decision_tree(newdata,newdata,100,1); // for checking
+        ArrayList<Double> actual = last_column(newdata);
+
+
+        System.out.println(accuracy_metrics(actual, predicted));
+        long endTime = System.nanoTime();
+        long timeElapsed = endTime - startTime;
+        System.out.println("Execution time in milliseconds : " + timeElapsed / 1000000);
 
     }
 
