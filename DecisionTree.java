@@ -225,17 +225,14 @@ public class decisionTree {
     }
 
     public static ArrayList<ArrayList<ArrayList<Double>>> train_test_split(ArrayList<ArrayList<Double>> dataset, double test_size) {
-        ArrayList<ArrayList<Double>> randomized = new ArrayList<>();
-
         // Create a new copy and shuffle the elements
-        Collections.copy(dataset, randomized);
+        ArrayList<ArrayList<Double>> randomized = (ArrayList) dataset.clone();
         Collections.shuffle(randomized);
 
         // Find the index where the test size should stop
         double testEnd = dataset.size() * test_size;
         int testIndex = (int) testEnd;
 
-        System.out.println(dataset.size());
         // Separate the 2 datasets
         ArrayList<ArrayList<Double>> test = new ArrayList<>(randomized.subList(0,testIndex));
         ArrayList<ArrayList<Double>> train = new ArrayList<>(randomized.subList(testIndex,randomized.size()));
@@ -292,7 +289,7 @@ public class decisionTree {
 
 
         // Testing using data
-        ArrayList<ArrayList<Double>> data = DataTransformation.getData();
+        ArrayList<ArrayList<Double>> data = DataTransformation.getData("/Users/sheryll/Desktop/SMU/Y2SEM1/CS201/Project_/DSA/data/data_updated.csv");
         // System.out.println(data.get(1));
         // System.out.println(data.get(100));
 
@@ -301,7 +298,6 @@ public class decisionTree {
 
         // HashMap<String, Object> tree2 = buildTree(data,15,10);
         // System.out.println(tree2.get(1));
-
 
         // ArrayList<ArrayList<ArrayList<Double>>> train_test = train_test_split(data, test_size);
         // ArrayList<ArrayList<Double>> train = train_test.get(0);
@@ -317,14 +313,11 @@ public class decisionTree {
 
 
 
-        ArrayList<ArrayList<Double>> newdata = new  ArrayList<ArrayList<Double>>();
+        ArrayList<ArrayList<Double>> newdata = DataTransformation.getData("/Users/sheryll/Desktop/SMU/Y2SEM1/CS201/Project_/DSA/data/small_dataset.csv");
         long startTime = System.nanoTime();
-        for (int i = 0 ; i < 1000; i++) {
-            newdata.add(data.get(i));
-        }
+
         ArrayList<Double> predicted = decision_tree(newdata,newdata,100,1); // for checking
         ArrayList<Double> actual = last_column(newdata);
-
 
         System.out.println(accuracy_metrics(actual, predicted));
         long endTime = System.nanoTime();

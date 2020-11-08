@@ -225,17 +225,14 @@ public class decisionTree {
     }
 
     public static ArrayList<ArrayList<ArrayList<Double>>> train_test_split(ArrayList<ArrayList<Double>> dataset, double test_size) {
-        ArrayList<ArrayList<Double>> randomized = new ArrayList<>();
-
         // Create a new copy and shuffle the elements
-        Collections.copy(dataset, randomized);
+        ArrayList<ArrayList<Double>> randomized = (ArrayList) dataset.clone();
         Collections.shuffle(randomized);
 
         // Find the index where the test size should stop
         double testEnd = dataset.size() * test_size;
         int testIndex = (int) testEnd;
 
-        System.out.println(dataset.size());
         // Separate the 2 datasets
         ArrayList<ArrayList<Double>> test = new ArrayList<>(randomized.subList(0,testIndex));
         ArrayList<ArrayList<Double>> train = new ArrayList<>(randomized.subList(testIndex,randomized.size()));
