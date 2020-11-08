@@ -10,10 +10,9 @@ import java.time.temporal.Temporal;
 
 public class DataTransformation{
 
-    public static ArrayList<ArrayList<Double>> getData() {
+    public static ArrayList<ArrayList<Double>> getData(String csvFilePath) {
         // Remember to Change csvFile Path to local directory
-        // C:\Users\young\OneDrive\Documents\GitHub\DSA\data
-        String csvFile = "/Users/young/OneDrive/Documents/Github/DSA/data/data_updated.csv";
+        String csvFile = csvFilePath;
         BufferedReader br = null;
         String line = "";
         ArrayList<ArrayList<Double>> data = new ArrayList<>();
@@ -48,10 +47,6 @@ public class DataTransformation{
         }catch(IOException ioe){
             ioe.printStackTrace();
         }
-
-        // for (int i = 0 ; i < 150 ; i++) {
-        //     System.out.println(data.get(i));
-        // }
 
         return data;
     }
