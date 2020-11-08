@@ -292,7 +292,7 @@ public class decisionTree {
 
 
         // Testing using data
-        ArrayList<ArrayList<Double>> data = DataTransformation.getData();
+        ArrayList<ArrayList<Double>> data = DataTransformation.getData("/Users/sheryll/Desktop/SMU/Y2SEM1/CS201/Project_/DSA/data/data_updated.csv");
         // System.out.println(data.get(1));
         // System.out.println(data.get(100));
 
@@ -301,7 +301,6 @@ public class decisionTree {
 
         // HashMap<String, Object> tree2 = buildTree(data,15,10);
         // System.out.println(tree2.get(1));
-
 
         // ArrayList<ArrayList<ArrayList<Double>>> train_test = train_test_split(data, test_size);
         // ArrayList<ArrayList<Double>> train = train_test.get(0);
@@ -317,14 +316,11 @@ public class decisionTree {
 
 
 
-        ArrayList<ArrayList<Double>> newdata = new  ArrayList<ArrayList<Double>>();
+        ArrayList<ArrayList<Double>> newdata = DataTransformation.getData("/Users/sheryll/Desktop/SMU/Y2SEM1/CS201/Project_/DSA/data/small_dataset.csv");
         long startTime = System.nanoTime();
-        for (int i = 0 ; i < 1000; i++) {
-            newdata.add(data.get(i));
-        }
+
         ArrayList<Double> predicted = decision_tree(newdata,newdata,100,1); // for checking
         ArrayList<Double> actual = last_column(newdata);
-
 
         System.out.println(accuracy_metrics(actual, predicted));
         long endTime = System.nanoTime();
