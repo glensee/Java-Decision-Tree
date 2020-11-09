@@ -114,9 +114,27 @@ public class DecisionTreeApplication {
         ArrayList<ArrayList<ArrayList<Double>>> b_groups = null;
 
         for (int i = 0; i < dataset.get(0).size(); i++) {
+
+            // Alternative 1: method greatly reduces complexity but also accuracy
+            // // using mean and std to find best split 
+            // // https://stats.stackexchange.com/questions/103800/calculate-probability-area-under-the-overlapping-area-of-two-normal-distributi
+            // HashMap<String, Object> map = BestSplit.split(dataset, i);
+            // Double gini = gini_index( (ArrayList<ArrayList<ArrayList<Double>>>) map.get("groups"), class_values);
+            // if (gini < b_score) {
+            //             b_index = (Integer) i;
+            //             b_value = (Double) map.get("value");
+            //             b_score = gini;
+            //             b_groups = (ArrayList<ArrayList<ArrayList<Double>>>) map.get("groups");
+            // }
+
+
+
+
+            // finding best split point manually
+
             for (ArrayList<Double> row : dataset) {
 
-                // finding best split point manually
+                
                 ArrayList<ArrayList<ArrayList<Double>>> groups = test_split((Integer) i, (Double) row.get(i), dataset);
                 Double gini = gini_index(groups, class_values);
                 if (gini < b_score) {
@@ -263,9 +281,10 @@ public class DecisionTreeApplication {
 
 
         // /Users/sheryll/Desktop/SMU/Y2SEM1/CS201/Project_
-        // Users\young\OneDrive\Documents\GitHub\DSA\data
+        // /Users/young/OneDrive/Documents/GitHub/DSA/data
         ArrayList<ArrayList<Double>> small_data = DataTransformation.getData("/Users/young/OneDrive/Documents/GitHub/DSA/data/small_dataset.csv");
         ArrayList<ArrayList<Double>> data_test = DataTransformation.getData("/Users/young/OneDrive/Documents/GitHub/DSA/data/data_test.csv");
+        ArrayList<ArrayList<Double>> big_data = DataTransformation.getData("/Users/young/OneDrive/Documents/GitHub/DSA/data/data_updated.csv");
 
         
         ArrayList<ArrayList<ArrayList<Double>>> train_test = train_test_split(small_data, test_size);
@@ -286,7 +305,7 @@ public class DecisionTreeApplication {
         System.out.println("Execution time in milliseconds : " + timeElapsed / 1000000 );
 
         // run through the sample test
-        
+
 
     }
 
