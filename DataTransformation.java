@@ -42,7 +42,6 @@ public class DataTransformation{
                 }
                 // to add the rows into the dataset
                 data.add(rows);
-                line = br.readLine();
             }
         }catch(IOException ioe){
             ioe.printStackTrace();
