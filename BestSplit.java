@@ -53,4 +53,24 @@ public class BestSplit {
 
     }
     
+
+    public static void split_v2(ArrayList<ArrayList<Double>> dataset, int i) {
+        // HashMap<String, Object> map = new HashMap<>();
+
+        int last_index = dataset.get(0).size() - 1;
+        int n = dataset.size();
+
+        QuickSort sort = new QuickSort(i);
+
+        sort.sort(dataset, 0, n-1);
+
+
+        
+
+        // map.put("index", i);
+        // map.put("value", split);
+        // map.put("groups", groups);
+
+        // return map;
+    }
 }
