@@ -53,9 +53,13 @@ public class BestSplit {
 
     }
     
-
-    public static void split_v2(ArrayList<ArrayList<Double>> dataset, int i) {
-        // HashMap<String, Object> map = new HashMap<>();
+    /**
+     * Gradient Descent or something like it at least
+     * @param dataset
+     * @param i
+     */
+    public static HashMap<String, Object> split_v2(ArrayList<ArrayList<Double>> dataset, int i, ArrayList<Double> classes) {
+        HashMap<String, Object> map = new HashMap<>();
 
         int last_index = dataset.get(0).size() - 1;
         int n = dataset.size();
@@ -64,13 +68,78 @@ public class BestSplit {
 
         sort.sort(dataset, 0, n-1);
 
+        int width = (int) Math.ceil(Math.log(n)) ;
+
+        double momentum = Math.log(n);
+        int current = n / 2;
+        // Double value = dataset.get(current).get(i);
+        int step = (int) Math.ceil(Math.log(n)) ;
+        
+        
+        int iter = 250;
+        Double center = 0.0;
+        ArrayList<ArrayList<ArrayList<Double>>> groups;
+
+
+        do {
+            iter--;
+            try {
+                 groups = DecisionTreeApplication.test_split((Integer) i, dataset.get(current - width).get(i), dataset);
+
+                Double left = DecisionTreeApplication.gini_index(groups, classes);
+
+                groups = DecisionTreeApplication.test_split((Integer) i, dataset.get(current + width).get(i), dataset);
+
+                Double right = DecisionTreeApplication.gini_index(groups, classes);
+
+                groups = DecisionTreeApplication.test_split((Integer) i, dataset.get(current).get(i), dataset);
+
+                center = DecisionTreeApplication.gini_index(groups, classes);
+
+                if (left > center && right > center) {
+                    width --;
+                    momentum --;
+                    current += momentum;
+                } else if (left > center && center > right) {
+                    current += step + momentum;
+                } else if (right > center && center > left) {
+                    current -= step + momentum;
+                } else if (current < n / 2) {
+                    current += step + momentum;
+                    iter -= 10;
+                } else if (current > n / 2) {
+                    current -= step + momentum;
+                    iter -= 10;
+
+                }
+
+                if (width == 1) {
+                    
+                    map.put("gini", center);
+                    map.put("index", i);
+                    map.put("value", dataset.get(current).get(i));
+                    map.put("groups", groups);
+                    return map;
+                }
+
+            } catch (IndexOutOfBoundsException e) {
+                System.out.println("AAAA");
+                return null;
+            }
+            
+
+        } while (iter > 0) ;
 
         
 
-        // map.put("index", i);
-        // map.put("value", split);
-        // map.put("groups", groups);
+            map.put("gini", center);
+            map.put("index", i);
+            map.put("value", dataset.get(current).get(i));
+            map.put("groups", groups);
+            return map;
 
-        // return map;
+            
+        
     }
+
 }

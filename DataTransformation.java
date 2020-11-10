@@ -8,7 +8,7 @@ import java.security.Key;
 import java.text.NumberFormat.Style;
 import java.time.temporal.Temporal;
 
-public class DataTransformation{
+public class DataTransformation {
 
     public static ArrayList<ArrayList<Double>> getData(String csvFilePath) {
         // Remember to Change csvFile Path to local directory
@@ -37,9 +37,20 @@ public class DataTransformation{
                 strLine[14] = temp;
 
                 // to add the elements into the rows
-                for (String s: strLine) {
-                    rows.add(Double.parseDouble(s));
+
+                // Removal of categorical values
+                // Mode (4), Explicit (9), Year (10) Columns
+                for (int i = 0; i < strLine.length; i++) {
+                    if (i == 4 || i == 9 || i == 10) {
+                                            continue;
+                    // System.out.println("i : "+i + " - "+ strLine[i]);
+                    } else {
+                    rows.add(Double.parseDouble(strLine[i]));
+                    }
                 }
+                // for (String s: strLine) {
+                //     rows.add(Double.parseDouble(s));
+                // }
                 // to add the rows into the dataset
                 data.add(rows);
             }
