@@ -2,9 +2,6 @@ import java.util.*;
 
 public class DecisionTreeApplication {
     public  static void split(HashMap<String, Object> node, int maxDepth, int minSize, int depth) {
-        // if (node.get("groups") == null) {
-        //     System.out.println("AAAA");
-        // }
         ArrayList<ArrayList<Double>> left = ((ArrayList<ArrayList<ArrayList<Double>>>) node.get("groups")).get(0);
         ArrayList<ArrayList<Double>> right = ((ArrayList<ArrayList<ArrayList<Double>>>) node.get("groups")).get(1);
 
@@ -116,11 +113,11 @@ public class DecisionTreeApplication {
         b_value = b_score = 999.0;
 
         ArrayList<ArrayList<ArrayList<Double>>> b_groups = null;
-        // System.out.println("+++++++++++++++++++++++++++++++++");
+        System.out.println("+++++++++++++++++++++++++++++++++");
 
         // Another O(n)
         for (int i = 0; i < dataset.get(0).size(); i++) {
-            // System.out.println("------------------------------");
+            System.out.println("------------------------------");
 
             // Alternative 1: method greatly reduces complexity but also accuracy
             // // using mean and std to find best split 
@@ -134,15 +131,7 @@ public class DecisionTreeApplication {
             //             b_groups = (ArrayList<ArrayList<ArrayList<Double>>>) map.get("groups");
             // }
 
-            // HashMap<String, Object> map = BestSplit.split_v2(dataset, i, class_values);
-
-            // if (map != null && ((Double) map.get("gini")) < b_score) {
-
-            //     b_index = (Integer) i;
-            //         b_value = (Double) map.get("value");
-            //         b_score = (Double) map.get("gini");
-            //         b_groups = (ArrayList<ArrayList<ArrayList<Double>>>) map.get("groups");
-            // }
+            BestSplit.split_v2(dataset, i);
 
 
             // finding best split point manually
@@ -152,7 +141,7 @@ public class DecisionTreeApplication {
                 
                 ArrayList<ArrayList<ArrayList<Double>>> groups = test_split((Integer) i, (Double) row.get(i), dataset); // O(n)
                 Double gini = gini_index(groups, class_values); // O(n), total O(n^3)
-                // System.out.println(row.get(i) + " " + gini);
+                System.out.println(row.get(i) + " " + gini);
                 if (gini < b_score) {
                     b_index = (Integer) i;
                     b_value = (Double) row.get(i);
@@ -301,21 +290,21 @@ public class DecisionTreeApplication {
         Double test_size = 0.25;
         Double small = 0.99;
 
-        ArrayList<ArrayList<Double>> small_data = DataTransformation.getData("/Users/young/OneDrive/Documents/GitHub/DSA/data/small_dataset.csv");
+        ArrayList<ArrayList<Double>> small_data = DataTransformation.getData("/D:/Data Structure and Algo/DSA/data/small_dataset.csv");
         ArrayList<ArrayList<Double>> data_test = DataTransformation.getData("/Users/young/OneDrive/Documents/GitHub/DSA/data/data_test.csv");
         ArrayList<ArrayList<Double>> big_data = DataTransformation.getData("/Users/young/OneDrive/Documents/GitHub/DSA/data/data_updated.csv");
         
-        ArrayList<ArrayList<ArrayList<Double>>> train_test = train_test_split(data_test, test_size);
+        ArrayList<ArrayList<ArrayList<Double>>> train_test = train_test_split(small_data, small);
         ArrayList<ArrayList<Double>> train = train_test.get(0);
         ArrayList<ArrayList<Double>> test = train_test.get(1);
 
         long startTime = System.nanoTime();
-        HashMap<String, Object> tree = buildTree(train, 10, 1);
+        HashMap<String, Object> tree = buildTree(train, 1, 1);
 
         ArrayList<Double> predicted = predict(tree, test); // for checking
         ArrayList<Double> actual = last_column(test);
 
-        System.out.println("Accuracy: ");   
+        System.out.println("Accuracy: ");
         System.out.println(accuracy_metrics(actual, predicted));
         long endTime = System.nanoTime();
         long timeElapsed = endTime - startTime;
@@ -342,17 +331,17 @@ public class DecisionTreeApplication {
         // testData.add(s3);
         // testData.add(s4);
 
-        // ArrayList<ArrayList<Double>> testData = DataTransformation.getData("/Users/young/OneDrive/Documents/GitHub/DSA/data/spotify.csv");
+        ArrayList<ArrayList<Double>> testData = DataTransformation.getData("/D:/Data Structure and Algo/DSA/data/spotify.csv");
 
-        // startTime = System.nanoTime();
-        // predicted = predict(tree, testData); // for checking
-        // actual = last_column(testData);
+        startTime = System.nanoTime();
+        predicted = predict(tree, testData); // for checking
+        actual = last_column(testData);
 
-        // System.out.println("Accuracy: ");
-        // System.out.println(accuracy_metrics(actual, predicted));
-        // endTime = System.nanoTime();
-        // timeElapsed = endTime - startTime;
-        // System.out.println("Execution time in milliseconds : " + timeElapsed / 1000000 );
+        System.out.println("Accuracy: ");
+        System.out.println(accuracy_metrics(actual, predicted));
+        endTime = System.nanoTime();
+        timeElapsed = endTime - startTime;
+        System.out.println("Execution time in milliseconds : " + timeElapsed / 1000000 );
 
     }
 
