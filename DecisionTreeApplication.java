@@ -85,7 +85,6 @@ public class DecisionTreeApplication {
         result.add(left);
         result.add(right);
 
-        // Loops through the dataset, O(n)
         for (ArrayList<Double> row : dataset) {
             if ((Double) row.get(index) < value) { // we only work with numerical values, no categorical
                 left.add(row);
@@ -115,7 +114,6 @@ public class DecisionTreeApplication {
         ArrayList<ArrayList<ArrayList<Double>>> b_groups = null;
         System.out.println("+++++++++++++++++++++++++++++++++");
 
-        // Another O(n)
         for (int i = 0; i < dataset.get(0).size(); i++) {
             System.out.println("------------------------------");
 
@@ -136,11 +134,10 @@ public class DecisionTreeApplication {
 
             // finding best split point manually
 
-            // Another O(n)
             for (ArrayList<Double> row : dataset) {
                 
-                ArrayList<ArrayList<ArrayList<Double>>> groups = test_split((Integer) i, (Double) row.get(i), dataset); // O(n)
-                Double gini = gini_index(groups, class_values); // O(n), total O(n^3)
+                ArrayList<ArrayList<ArrayList<Double>>> groups = test_split((Integer) i, (Double) row.get(i), dataset);
+                Double gini = gini_index(groups, class_values);
                 System.out.println(row.get(i) + " " + gini);
                 if (gini < b_score) {
                     b_index = (Integer) i;
@@ -243,7 +240,6 @@ public class DecisionTreeApplication {
                 int last_index = group.get(0).size() - 1;
                 int count = 0;
 
-                // Loops kn/2 + kn/2 = O(n)
                 for (ArrayList<Double> row : group) {
                     if (row.get(last_index).equals(label)) {
                         count++;
