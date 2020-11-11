@@ -173,6 +173,8 @@ public class DecisionTreeApplication {
         Integer index = (Integer) tree.get("index");
         Double value = (Double) tree.get("value");
 
+
+
         if (row.get(index) <  value) {
             if (tree.get("left") instanceof HashMap ) {
 
@@ -290,19 +292,31 @@ public class DecisionTreeApplication {
         Double test_size = 0.25;
         Double small = 0.99;
 
-        ArrayList<ArrayList<Double>> small_data = DataTransformation.getData("/D:/Data Structure and Algo/DSA/data/small_dataset.csv");
+
+        // Testing using data
+        // ArrayList<ArrayList<Double>> data = DataTransformation.getData("/Users/sheryll/Desktop/SMU/Y2SEM1/CS201/Project_/DSA/data/data_updated.csv");
+
+
+        // /Users/sheryll/Desktop/SMU/Y2SEM1/CS201/Project_
+        // /Users/young/OneDrive/Documents/GitHub/DSA/data
+        ArrayList<ArrayList<Double>> small_data = DataTransformation.getData("/Users/young/OneDrive/Documents/GitHub/DSA/data/small_dataset.csv");
         ArrayList<ArrayList<Double>> data_test = DataTransformation.getData("/Users/young/OneDrive/Documents/GitHub/DSA/data/data_test.csv");
         ArrayList<ArrayList<Double>> big_data = DataTransformation.getData("/Users/young/OneDrive/Documents/GitHub/DSA/data/data_updated.csv");
+
         
         ArrayList<ArrayList<ArrayList<Double>>> train_test = train_test_split(small_data, small);
         ArrayList<ArrayList<Double>> train = train_test.get(0);
         ArrayList<ArrayList<Double>> test = train_test.get(1);
 
+
         long startTime = System.nanoTime();
+
         HashMap<String, Object> tree = buildTree(train, 1, 1);
+
 
         ArrayList<Double> predicted = predict(tree, test); // for checking
         ArrayList<Double> actual = last_column(test);
+
 
         System.out.println("Accuracy: ");
         System.out.println(accuracy_metrics(actual, predicted));
@@ -311,37 +325,9 @@ public class DecisionTreeApplication {
         System.out.println("Execution time in milliseconds : " + timeElapsed / 1000000 );
 
 
-
+        
         // run through the sample test
-        System.out.println("Testing with Spotify data");
 
-        // ArrayList<ArrayList<Double>> testData = new ArrayList<ArrayList<Double>>();
-        // // acousticness,danceability,duration_ms,energy,explicit,instrumentalness,key,liveness,loudness,mode,popularity,speechiness,tempo,valence,year
-        // // BTS Dynamite - 0t1kP63rueHleOhQkYSXFY
-        // ArrayList<Double> s1 = new ArrayList<>(Arrays.asList(0.0112, 0.746, 199054.0, 0.765, 0.0, 0.0, 6.0, 0.0936, -4.41, 0.0, 1.0, 0.0993, 114.044, 0.737, 2020.0));
-        // // BlackPink How you like that - 6y6k14YN6MbKpGIv1Rk00Q
-        // ArrayList<Double> s2 = new ArrayList<>(Arrays.asList(0.0694, 0.828, 181264.0, 0.782, 0.0, 0.0000341, 11.0, 0.0544, -4.014, 1.0, 1.0, 0.0918, 130.013, 0.351, 2020.0));
-        // // NCT Make a wish
-        // ArrayList<Double> s3 = new ArrayList<>(Arrays.asList(0.0632, 0.732, 229400.0, 0.795, 0.0, 0.0, 8.0, 0.0569, -2.263, 1.0, 1.0, 0.1, 100.954, 0.693, 2020.0));
-        // // Ariana Grande Position
-        // ArrayList<Double> s4 = new ArrayList<>(Arrays.asList(0.468, 0.737, 172325.0, 0.802, 1.0, 0.0, 0.0, 0.0931, -4.771, 1.0, 1.0, 0.0878, 144.015, 0.682, 2020.0));
-
-        // testData.add(s1);
-        // testData.add(s2);
-        // testData.add(s3);
-        // testData.add(s4);
-
-        ArrayList<ArrayList<Double>> testData = DataTransformation.getData("/D:/Data Structure and Algo/DSA/data/spotify.csv");
-
-        startTime = System.nanoTime();
-        predicted = predict(tree, testData); // for checking
-        actual = last_column(testData);
-
-        System.out.println("Accuracy: ");
-        System.out.println(accuracy_metrics(actual, predicted));
-        endTime = System.nanoTime();
-        timeElapsed = endTime - startTime;
-        System.out.println("Execution time in milliseconds : " + timeElapsed / 1000000 );
 
     }
 
