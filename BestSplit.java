@@ -52,5 +52,73 @@ public class BestSplit {
         return map;
 
     }
-    
+    public static HashMap<String,Object> split_v2(ArrayList<ArrayList<Double>> dataset, int i, ArrayList<Double> class_values) {
+        HashMap<String, Object> map = new HashMap<>();
+
+        int last_index = dataset.get(0).size() - 1;
+        int n = dataset.size();
+
+        QuickSort sort = new QuickSort(i);
+
+        sort.sort(dataset, 0, n-1);
+
+        ArrayList<ArrayList<ArrayList<Double>>> groups = DecisionTreeApplication.test_split((Integer) i, (Double) dataset.get(0).get(i), dataset);
+        Double start = DecisionTreeApplication.gini_index(groups, class_values);
+        int start_index = 0;
+         
+        groups = DecisionTreeApplication.test_split((Integer) i, (Double) dataset.get(dataset.size() - 1).get(i), dataset);
+        Double end = DecisionTreeApplication.gini_index(groups, class_values);
+        int end_index = dataset.size() - 1;
+
+        groups = DecisionTreeApplication.test_split((Integer) i, (Double) dataset.get(dataset.size() / 2 ).get(i), dataset);
+        Double middle = DecisionTreeApplication.gini_index(groups, class_values);
+        int middle_index = dataset.size() / 2;
+        while (end_index - middle_index > 2 && middle_index - start_index > 2) {
+
+            if (middle <= end && start <= end) {
+                end = middle;
+                end_index = middle_index;
+                middle_index = (start_index + end_index) / 2;
+            } else if (middle <= start && end <= start) {
+                start = middle;
+                start_index = middle_index;
+                middle_index = (start_index + end_index) / 2;
+
+            } else if (middle >= start && middle >= end) {
+                if (start > end) {
+                    start = middle;
+                    start_index = middle_index;
+                    middle_index = (start_index + end_index) / 2;
+                } else {
+                    end = middle;
+                    end_index = middle_index;
+                    middle_index = (start_index + end_index) / 2;
+                }
+            }
+
+            groups = DecisionTreeApplication.test_split((Integer) i, (Double) dataset.get(middle_index).get(i), dataset);
+            middle = DecisionTreeApplication.gini_index(groups, class_values);
+        }
+
+        map.put("index", i);
+        map.put("value", dataset.get(middle_index).get(i));
+        map.put("groups", groups);
+        map.put("gini", middle);
+
+
+
+
+
+
+
+
+        
+
+        // map.put("index", i);
+        // map.put("value", split);
+        // map.put("groups", groups);
+
+        return map;
+    }
 }
+

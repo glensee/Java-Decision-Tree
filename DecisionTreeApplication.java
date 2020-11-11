@@ -128,24 +128,31 @@ public class DecisionTreeApplication {
             //             b_groups = (ArrayList<ArrayList<ArrayList<Double>>>) map.get("groups");
             // }
 
+            HashMap<String, Object> map = BestSplit.split_v2(dataset, i, class_values);
+
+            if ((Double) map.get("gini") < b_score) {
+                b_index = (Integer) i;
+                b_value = (Double) map.get("value");
+                b_score = (Double) map.get("gini");
+                b_groups = (ArrayList<ArrayList<ArrayList<Double>>>) map.get("groups");
+            }
+
 
 
 
             // finding best split point manually
+            // for (ArrayList<Double> row : dataset) {
 
-            for (ArrayList<Double> row : dataset) {
+            //     ArrayList<ArrayList<ArrayList<Double>>> groups = test_split((Integer) i, (Double) row.get(i), dataset);
+            //     Double gini = gini_index(groups, class_values);
+            //     if (gini < b_score) {
+            //         b_index = (Integer) i;
+            //         b_value = (Double) row.get(i);
+            //         b_score = gini;
+            //         b_groups = groups;
+            //     }
 
-                
-                ArrayList<ArrayList<ArrayList<Double>>> groups = test_split((Integer) i, (Double) row.get(i), dataset);
-                Double gini = gini_index(groups, class_values);
-                if (gini < b_score) {
-                    b_index = (Integer) i;
-                    b_value = (Double) row.get(i);
-                    b_score = gini;
-                    b_groups = groups;
-                }
-
-            }
+            // }
         }
 
         result.put("index", b_index);
@@ -303,7 +310,7 @@ public class DecisionTreeApplication {
             
 
         
-            ArrayList<ArrayList<ArrayList<Double>>> train_test = train_test_split(small_data, test_size);
+            ArrayList<ArrayList<ArrayList<Double>>> train_test = train_test_split(data_test, test_size);
             ArrayList<ArrayList<Double>> train = train_test.get(0);
             ArrayList<ArrayList<Double>> test = train_test.get(1);
 
