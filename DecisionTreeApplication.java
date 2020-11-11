@@ -112,10 +112,8 @@ public class DecisionTreeApplication {
         b_value = b_score = 999.0;
 
         ArrayList<ArrayList<ArrayList<Double>>> b_groups = null;
-        System.out.println("+++++++++++++++++++++++++++++++++");
 
         for (int i = 0; i < dataset.get(0).size(); i++) {
-            System.out.println("------------------------------");
 
             // Alternative 1: method greatly reduces complexity but also accuracy
             // // using mean and std to find best split 
@@ -129,22 +127,23 @@ public class DecisionTreeApplication {
             //             b_groups = (ArrayList<ArrayList<ArrayList<Double>>>) map.get("groups");
             // }
 
-            BestSplit.split_v2(dataset, i);
+
 
 
             // finding best split point manually
 
             for (ArrayList<Double> row : dataset) {
+
                 
                 ArrayList<ArrayList<ArrayList<Double>>> groups = test_split((Integer) i, (Double) row.get(i), dataset);
                 Double gini = gini_index(groups, class_values);
-                System.out.println(row.get(i) + " " + gini);
                 if (gini < b_score) {
                     b_index = (Integer) i;
                     b_value = (Double) row.get(i);
                     b_score = gini;
                     b_groups = groups;
                 }
+
             }
         }
 
@@ -156,17 +155,7 @@ public class DecisionTreeApplication {
     }
 
 
-    public static ArrayList<Double> predict(HashMap<String, Object> tree, ArrayList<ArrayList<Double>> test) {
-        ArrayList<Double> predictions = new ArrayList<Double>();
-
-        for (ArrayList<Double> row : test) {
-            predictions.add(predict_row(tree, row));
-        } 
-
-        return predictions;
-    }
-
-    public  static Double predict_row(HashMap<String, Object> tree, ArrayList<Double> row) {
+    public  static Double predict(HashMap<String, Object> tree, ArrayList<Double> row) {
         Integer index = (Integer) tree.get("index");
         Double value = (Double) tree.get("value");
 
@@ -175,13 +164,13 @@ public class DecisionTreeApplication {
         if (row.get(index) <  value) {
             if (tree.get("left") instanceof HashMap ) {
 
-                return predict_row((HashMap<String, Object>) tree.get("left"), row);
+                return predict((HashMap<String, Object>) tree.get("left"), row);
             } else {
                 return (Double) tree.get("left");
             }
         } else {
             if (tree.get("right") instanceof HashMap ) {
-                return predict_row((HashMap<String, Object>) tree.get("right"), row);
+                return predict((HashMap<String, Object>) tree.get("right"), row);
             } else {
                 return  (Double) tree.get("right");
             }
@@ -190,17 +179,17 @@ public class DecisionTreeApplication {
     }
 
 
-    // public  static ArrayList<Double> decision_tree(ArrayList<ArrayList<Double>> train, ArrayList<ArrayList<Double>> test, int max_depth, int min_size) {
-    //     ArrayList<Double> predictions = new ArrayList<>();
-    //     HashMap<String, Object> tree = buildTree(train, max_depth, min_size);
+    public  static ArrayList<Double> decision_tree(ArrayList<ArrayList<Double>> train, ArrayList<ArrayList<Double>> test, int max_depth, int min_size) {
+        ArrayList<Double> predictions = new ArrayList<>();
+        HashMap<String, Object> tree = buildTree(train, max_depth, min_size);
 
-    //         for (ArrayList<Double> row : test) {
-    //             Double prediction = predict(tree, row);
-    //             predictions.add(prediction);
-    //         }
+        for (ArrayList<Double> row : test) {
+            Double prediction = predict(tree, row);
+            predictions.add(prediction);
+        }
 
-    //     return predictions;
-    // }
+        return predictions;
+    }
 
 
     public  static Double accuracy_metrics(ArrayList<Double> actual, ArrayList<Double> predicted) {
@@ -241,7 +230,7 @@ public class DecisionTreeApplication {
                 int count = 0;
 
                 for (ArrayList<Double> row : group) {
-                    if (row.get(last_index).equals(label)) {
+                    if (row.get(last_index) == label) {
                         count++;
                     }
                 }
@@ -286,8 +275,6 @@ public class DecisionTreeApplication {
 
     public static void main(String[] args) {
         Double test_size = 0.25;
-        Double small = 0.99;
-
 
         // Testing using data
         // ArrayList<ArrayList<Double>> data = DataTransformation.getData("/Users/sheryll/Desktop/SMU/Y2SEM1/CS201/Project_/DSA/data/data_updated.csv");
@@ -300,17 +287,14 @@ public class DecisionTreeApplication {
         ArrayList<ArrayList<Double>> big_data = DataTransformation.getData("/Users/young/OneDrive/Documents/GitHub/DSA/data/data_updated.csv");
 
         
-        ArrayList<ArrayList<ArrayList<Double>>> train_test = train_test_split(small_data, small);
+        ArrayList<ArrayList<ArrayList<Double>>> train_test = train_test_split(small_data, test_size);
         ArrayList<ArrayList<Double>> train = train_test.get(0);
         ArrayList<ArrayList<Double>> test = train_test.get(1);
 
 
         long startTime = System.nanoTime();
 
-        HashMap<String, Object> tree = buildTree(train, 1, 1);
-
-
-        ArrayList<Double> predicted = predict(tree, test); // for checking
+        ArrayList<Double> predicted = decision_tree(train,test,1000,1); // for checking
         ArrayList<Double> actual = last_column(test);
 
 
@@ -320,8 +304,6 @@ public class DecisionTreeApplication {
         long timeElapsed = endTime - startTime;
         System.out.println("Execution time in milliseconds : " + timeElapsed / 1000000 );
 
-
-        
         // run through the sample test
 
 
