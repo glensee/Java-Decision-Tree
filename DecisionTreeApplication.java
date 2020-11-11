@@ -1,4 +1,5 @@
 import java.util.*;
+import java.lang.Math;
 
 public class DecisionTreeApplication {
     public  static void split(HashMap<String, Object> node, int maxDepth, int minSize, int depth) {
@@ -286,25 +287,54 @@ public class DecisionTreeApplication {
         ArrayList<ArrayList<Double>> data_test = DataTransformation.getData("/Users/young/OneDrive/Documents/GitHub/DSA/data/data_test.csv");
         ArrayList<ArrayList<Double>> big_data = DataTransformation.getData("/Users/young/OneDrive/Documents/GitHub/DSA/data/data_updated.csv");
 
+        double mean = 0;
+        double var = 0;
+        double sum_sq = 0;
+
+        double mean_t = 0;
+        double var_t = 0;
+        double sum_sq_t = 0;
+        for (int i = 0 ; i < 30; i++) {
+            
+
         
-        ArrayList<ArrayList<ArrayList<Double>>> train_test = train_test_split(small_data, test_size);
-        ArrayList<ArrayList<Double>> train = train_test.get(0);
-        ArrayList<ArrayList<Double>> test = train_test.get(1);
+            ArrayList<ArrayList<ArrayList<Double>>> train_test = train_test_split(small_data, test_size);
+            ArrayList<ArrayList<Double>> train = train_test.get(0);
+            ArrayList<ArrayList<Double>> test = train_test.get(1);
 
 
-        long startTime = System.nanoTime();
+            long startTime = System.nanoTime();
 
-        ArrayList<Double> predicted = decision_tree(train,test,1000,1); // for checking
-        ArrayList<Double> actual = last_column(test);
+            ArrayList<Double> predicted = decision_tree(train,test,1000,1); // for checking
+            ArrayList<Double> actual = last_column(test);
 
+            double accuracy = accuracy_metrics(actual, predicted);
+            System.out.println("Accuracy: ");
+            System.out.println(accuracy);
+            long endTime = System.nanoTime();
+            long timeElapsed = endTime - startTime;
+            System.out.println("Execution time in milliseconds : " + timeElapsed / 1000000 );
 
-        System.out.println("Accuracy: ");
-        System.out.println(accuracy_metrics(actual, predicted));
-        long endTime = System.nanoTime();
-        long timeElapsed = endTime - startTime;
-        System.out.println("Execution time in milliseconds : " + timeElapsed / 1000000 );
+            mean += accuracy;
+            sum_sq += Math.pow(accuracy, 2);
+
+            mean_t += timeElapsed / 1000000;
+            sum_sq_t += Math.pow(timeElapsed / 1000000 , 2);
+        }
+
+        mean /= 30;
+        var = sum_sq / 30 - mean * mean;
+
+        mean_t /= 30;
+        var_t = sum_sq_t / 30 - mean_t * mean_t;
 
         // run through the sample test
+        System.out.println("Mean Accuracy: " + mean);
+        System.out.println("Variance Accuracy: " + var);
+
+        System.out.println("Mean Time: " + mean_t);
+        System.out.println("Variance Time: " + var_t);
+
 
 
     }
