@@ -3,6 +3,11 @@ import java.util.*;
 public class QuickSort {
     private int index;
 
+    /**
+     * Constructor
+     * 
+     * @param index of column to sort the values by
+     */
     public QuickSort(int index) {
         this.index = index;
     }
@@ -34,7 +39,7 @@ public class QuickSort {
             } 
         } 
   
-        // swap arr[i+1] and arr[high] (or pivot) 
+        // swap arraylist at [i+1] and [high] (or pivot) 
         ArrayList<Double> row_i = arr.get(i+1);
         ArrayList<Double> row_high = arr.set(high, row_i);
         arr.set(i+1, row_high);

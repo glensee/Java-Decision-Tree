@@ -8,7 +8,7 @@ import java.security.Key;
 import java.text.NumberFormat.Style;
 import java.time.temporal.Temporal;
 
-public class DataTransformation{
+public class DataTransformation {
 
     public static ArrayList<ArrayList<Double>> getData(String csvFilePath) {
         // Remember to Change csvFile Path to local directory
@@ -24,14 +24,15 @@ public class DataTransformation{
                 ArrayList<Double> rows = new ArrayList<>();
                 String[] strLine = line.split(",");
 
-                // make sure that <50 == 0 , >50  == 1 for popularity to change it into a boolean
+                // make sure that <50 == 0 , >50 == 1 for popularity to change it into a boolean
                 // 0 being not popular and 1 being popular
-                if(Double.parseDouble(strLine[10]) >= 50){
+                if (Double.parseDouble(strLine[10]) >= 50) {
                     strLine[10] = Integer.toString(1);
-                }else{
+                } else {
                     strLine[10] = Integer.toString(0);
                 }
-                //to swap the position of popular and year columns
+
+                // to swap the position of popular and year columns
                 var temp = strLine[10];
                 strLine[10] = strLine[14];
                 strLine[14] = temp;
@@ -41,21 +42,16 @@ public class DataTransformation{
                 // Mode (4), Explicit (9), Year (10) Columns
                 for (int i = 0; i < strLine.length; i++) {
                     if (i == 4 || i == 9 || i == 10) {
-                                            continue;
-                    // System.out.println("i : "+i + " - "+ strLine[i]);
+                        continue;
                     } else {
-                    rows.add(Double.parseDouble(strLine[i]));
+                        rows.add(Double.parseDouble(strLine[i]));
                     }
                 }
-                
-                
-                // for (String s: strLine) {
-                //     rows.add(Double.parseDouble(s));
-                // }
+
                 // to add the rows into the dataset
                 data.add(rows);
             }
-        }catch(IOException ioe){
+        } catch (IOException ioe) {
             ioe.printStackTrace();
         }
 
